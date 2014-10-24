@@ -1,4 +1,12 @@
 var qs = require('querystring');
+var mongojs= require("mongojs");
+var mongoose= require('mongoose');
+var mongodb= require('mongodb');
+var uri= 'mongodb://shashankgolla:cnt5412@ds045970.mongolab.com:45970/unphish?authSoruce=admin'
+
+var db=mongoose.connection;
+
+
 
 function home(response) {
 		
@@ -41,10 +49,36 @@ function processlogin(response, request) {
 		request.on('end', function() {
 			var	loginData = qs.parse(procPost);
 			console.log("loginData: " + loginData);
-			var userName = loginData['username'];
-			var password = loginData['password'];
+			var userName1 = loginData['username'];
+			var password1 = loginData['password'];
 			response.writeHead(200, {"Content-Type": "text/plain"});
-			response.write(userName + " " + password);
+			response.write(userName1 + " " + password1);
+			
+			
+		var seedData=[
+			{
+			userName: userName1,
+			password: password1
+			}
+		];
+
+
+
+mongodb.MongoClient.connect(uri,function(err, db){
+
+        if(err) throw err;
+
+        var userInfo=db.collection('userInfo');
+
+        userInfo.insert(seedData,function(err,result){
+
+        if(err) throw err;
+        });
+
+
+});
+
+
 			response.end();
 		});
 	} else {

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Ask a eZhi Banking Representative</title>
+</head>
+
+<body>
+	<h3 align="center"><font color="red">eZhi Money Online Banking FAQ</font></h3>
+	<p id="prevQuestions">
+		<script>
+			var mongodb = require('mongodb');
+			var uri = 'mongodb://shashankgolla:cnt5412@ds045970.mongolab.com:45970/unphish?authSoruce=admin'
+
+			mongodb.MongoClient.connect(uri, function(err, db){
+				if (err) throw err;
+
+				var faq = db.collection('faq');
+
+				collection.find().toArray(function(err, questions){
+					if (err) throw err;
+
+					if(questions.length != 0) {
+						var qLabel = document.createTextNode("Question: ");
+						var aLabel = document.createTextNode("Answer: ");
+						var br = document.createElement("BR");
+						var body = document.getElementById("prevQuestions");
+						for (var q in questions) {
+							// Print out the questions
+							body.appendChild(qLabel);
+							body.appendChild(document.createTextNode(q.question));
+							body.appendChild(br);
+							body.appendChild(aLabel);
+							body.appendChild(document.createTextNode(q.answer));		
+							body.appendChild(br);
+						}
+					}
+					 
+				});
+			});
+		</script>
+	</p>
+	<script>
+		function update() {
+			var br = document.createElement("BR");
+			var qLabel = document.createTextNode("Question: ");
+			var aLabel = document.createTextNode("Answer: ");
+			var body = document.getElementById("prevQuestions");
+
+			body.appendChild(qLabel);
+			body.appendChild(document.createTextNode(document.getElementById("userPost").value));
+			body.appendChild(br);
+			body.appendChild(aLabel);
+			body.appendChild(document.createTextNode("Unanswered"));
+			body.appendChild(br);
+			// insert question and answer into database
+		}
+	</script>
+	<label for="userPost">Ask a question<br></label>
+	<input type="text" id="userPost">
+	<button onclick="update()">Submit</button>
+</body>
+
+</html>

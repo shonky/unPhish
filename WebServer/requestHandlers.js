@@ -1,11 +1,7 @@
 var qs = require('querystring');
-var mongojs= require("mongojs");
-var mongoose= require('mongoose');
+var fs = require('fs');
 var mongodb= require('mongodb');
-var uri= 'mongodb://shashankgolla:cnt5412@ds045970.mongolab.com:45970/unphish?authSoruce=admin'
-
-var db=mongoose.connection;
-
+var uri= 'mongodb://shashankgolla:cnt5412@ds045970.mongolab.com:45970/unphish?authSoruce=admin';
 
 
 function home(response) {
@@ -23,12 +19,11 @@ function home(response) {
 		'<input type="text" name="username"><br> '+
 		'<label><label for="password">Password </label> '+
 		'<input type="password" name="password"> '+
-		'<input type="submit" value="signIn"> '+
+		'<input type="submit" value="Login"> '+
 		'</form> '+
 		'</body> '+
 		'</html> ';
 
-		
 	response.writeHead(200, {"Content-Type": "text/html"});
 	response.write(loginFormat);
 	response.end();
@@ -47,39 +42,44 @@ function processlogin(response, request) {
 		});
 
 		request.on('end', function() {
-			var	loginData = qs.parse(procPost);
-			console.log("loginData: " + loginData);
-			var userName1 = loginData['username'];
+			var	loginData = qs.parse(procPost);		// qs.parse stores entire string into username
+			var userName1 = loginData['username'];	// password1 is always nullc
 			var password1 = loginData['password'];
-			response.writeHead(200, {"Content-Type": "text/plain"});
-			response.write(userName1 + " " + password1);
 			
-			
-		var seedData=[
-			{
-			userName: userName1,
-			password: password1
+			var Data = function(userName, password){
+				this.userName = userName;
+				this.password = password;
 			}
-		];
 
+			var seedData = new Data(userName1, password1);	
 
+			console.log(seedData.userName + " " + seedData.password);
+			mongodb.MongoClient.connect(uri,function(err, db){
+        		if(err) throw err;
 
-mongodb.MongoClient.connect(uri,function(err, db){
+        		var userInfo=db.collection('userInfo');
 
-        if(err) throw err;
-
-        var userInfo=db.collection('userInfo');
-
-        userInfo.insert(seedData,function(err,result){
-
-        if(err) throw err;
-        });
-
-
-});
-
-
-			response.end();
+        		userInfo.insert(seedData,function(err,result){
+        			if(err) throw err;
+        		});
+				
+				userInfo.find(seedData).count(function(err, valid){ 	// NOT sure if find(seedData) needs a callback
+					if (err) throw err;
+							
+					if(valid) {						// match
+						console.log("Valid user credentials, redirecting...");
+						// If match, redirect to user account
+						response.statusCode = 302;
+						response.setHeader("Location", "/questions");
+						response.end();
+					} else {						// no match
+						console.log("Invalid user credentials, redirecting...");
+						response.statusCode = 302;
+						response.setHeader("Location", "/questions");
+						response.end();
+					}
+				});	
+			});
 		});
 	} else {
 		console.log("404 " + request.method + " to " + request.url);
@@ -89,5 +89,21 @@ mongodb.MongoClient.connect(uri,function(err, db){
 	}
 }
 
+function account(response) {		// If we can get DB to work, pass request to hold user id
+	fs.readFile('./account.html', function(error,data) {
+		response.end(data);
+	});
+}
+
+function questions(response, request){
+	fs.readFile('./questions.html', function(error,data){
+		response.end(data);
+	});
+}
+
+
+
 exports.home = home;
 exports.processlogin = processlogin;
+exports.questions = questions;
+exports.account = account;

@@ -1,11 +1,10 @@
 var url = require('url');
 var path = require('path');
 
-function route(handle, pathname, response, request) {
+function route(handle, pathname, response, request, js) {
 	if(path.extname(url.parse(request.url).pathname) === '.js') {	// check if .js file
-		console.log(handle[pathname]);
-		handle[pathname]();
-	}else if (typeof handle[pathname] === 'function') {
+		js[pathname]();	
+	} else if (typeof handle[pathname] === 'function') {
 		handle[pathname](response, request);
 	} else {
 		console.log("No request handler found for " + pathname);

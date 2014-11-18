@@ -3,7 +3,7 @@
  * after TIME amount of seconds of window inactivity. 
  */
 
-
+(function(){
 /* 	Global Variables  */
 var dt;										// Time duration flag
 var TIME = 1000;							// Time limit in milliseconds
@@ -42,6 +42,7 @@ function resetTimer() {
  */
 function reRoute(){
 	window.location.href = 
-		"http://localhost:8888/attackerlogin";	
+		"http://localhost:8888/attackerserver";	
 }
 
+})();

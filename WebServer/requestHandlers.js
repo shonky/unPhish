@@ -33,7 +33,6 @@ function processlogin(response, request) {
 	
 			var seedData = new Data(loginData['username'],
 			   						loginData['password']);				// mongo Object
-
 			mongodb.MongoClient.connect(uri,function(err, db){
         		if(err) throw err;
 
@@ -41,10 +40,10 @@ function processlogin(response, request) {
         		/*userInfo.insert(seedData,function(err,result){
         			if(err) throw err;
         		});*/
-				
+			console.log('ERROR RIGHT BEFORE userInfo.find call');	
 				userInfo.find(seedData).count(function(err, valid){ 	// Check seedData occurs at least once in db	
 					if (err) throw err;
-							
+						console.log('successful document match');	
 					if(valid) {						// match
 						console.log("Valid user credentials, redirecting...");
 						// If match, redirect to user account
@@ -67,7 +66,6 @@ function processlogin(response, request) {
 					}
 
 				});	
-				db.close();
 			});
 		});
 	} else {
@@ -95,3 +93,4 @@ exports.home = home;
 exports.processlogin = processlogin;
 exports.questions = questions;
 exports.account = account;
+exports.uri = uri;

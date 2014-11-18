@@ -1,7 +1,7 @@
 var fs = require('fs');
 var qs = require('querystring');
 
-function attackerserver() {
+function attackerserver(response) {
 	fs.readFile('./attackerserver.html', function(error,data){
 		response.end(data);
 	});

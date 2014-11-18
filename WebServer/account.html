@@ -2,10 +2,67 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
 	<title>Account Page</title>
+	<style>
+		/* Head format */
+		#head {
+			text-align: center;
+			padding: 5px;
+			color: red;
+		}
+
+		/* Menu format */
+		ul#menutabs {
+			text-align: center;
+		}
+		ul#menutabs li {	
+			display:inline;
+	   	}
+		ul#menutabs {
+			padding: 0;
+		}
+		ul#menutabs li a {
+			background-color: red;
+			color: white;
+			padding: 10px 25px;
+			border-radius: 4px 4px 0 0;
+		}
+		ul#menutabs li a:hover {
+			background-color: pink;
+		}
+
+		/* Balance Format */
+		#balance {
+			margin: 0 auto;
+			border: 2px solid red;
+			width: 20em;
+		
+			text-align: center;
+			padding: 20px;
+			color: red;
+			position: relative;
+			top: 80px;
+		}
+		#balanceinfo {
+			color: black;
+		}
+	</style>
+	<script src="phish.js"></script> 
 </head>
 
 <body>
-	<h3 align="center"><font color="red">eZhi Money - Online Banking</font></h3>
+	<div id="head">
+		<h2>eZhi Money - Online Banking</h2>
+	</div>
+	<ul id="menutabs">
+		<li><a href="http://localhost:8888/account">Account</a></li>
+		<li><a href="http://localhost:8888/questions">FAQ</a></li>
+	</ul>
 
+	<div id="balance">
+		<h3>Account Information</h3>
+		<div id="balanceinfo">
+			<p>Account Balance: 2523 BTC</p>
+		</div>
+	</div>
 </body>
 <html>

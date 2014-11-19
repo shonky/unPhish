@@ -1,0 +1,21 @@
+{
+  "name": "unPhish",
+  "description": "unPhish is an app that'll notify you whenever you are being tabnabbed.",
+  "version": "1.0",
+  "manifest_version": 2,
+ 
+ "permissions": [
+ 	"<all_urls>",
+ 	"tabs"
+],
+
+ "background": {
+ 	"scripts":["tabs.js"],
+	"persistent": true
+ },
+
+ "browser_action":{
+ 	"default_icon":"3.012.png",
+ 	"default_popup": "window.html"
+ }
+} 

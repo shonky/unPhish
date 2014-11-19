@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
+	<title>Home Login</title>
+	<style>
+	#head {
+		text-align: center;
+		padding: 10px;
+		color: red;
+	}
+
+	#login {
+		border: 2px solid red;
+		color: black;
+		margin: 0 auto;
+		text-align: left;
+		padding: 25px;
+		position: absolute;
+		top: 120px;
+		left: 410px;
+		width: 20em;
+	}
+
+	#loginSubmit {
+	    width: 58px;
+    	height: 20px;
+		float: right;	
+		margin-top: 5px;
+	}
+
+	input[type=text], input[type=password] {
+		color: black;
+    	margin: 10px;
+    	margin-top: 5px;
+    	margin-left: 37px;
+    	width: 230px;
+    	height: 30px;
+	}
+
+	label {
+		color: black;
+		display: inline-block;
+		padding-top: 4px;
+	}
+	label.padding {
+		padding-left:2.3em; 
+	}
+	</style>
+</head> 
+
+<body>
+	<div id="head">
+		<h2>Welcome to Attacker Banking</h2>
+	</div>
+
+	<div id="login">
+		<form action="steallogin" enctype="text/plain" method="post">
+			<label><label class="padding"for="username">Username:</label><br>
+			<input type="text" name="username"><br>
+			<label><label class="padding"for="password">Password:</label><br>
+			<input type="password" name="password"><br>
+			<div id="loginSubmit">
+				<input type="submit" value="Login">
+			</div>
+		</form>
+	</div>
+</body>
+</html>

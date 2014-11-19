@@ -1,0 +1,35 @@
+onblur = triggered when the element loses focus (will be effective if the user
+is on the home account page)
+
+onfocus = when the user is redirected to the malicious site and the user
+clicks on the login form, utilize onfocus to trigger some sort of possible
+injecting keylogger, or maybe get ip address.
+
+
+onmouseover = we can implement an add on the website. When the user puts his
+mouse over the add, the tabnabbing script can be executed. Possible attack
+vector. May or may not work, the function call may have to explicit from the
+trusted host. The only way this would work is if user clicks on the website.
+
+http://www.w3schools.com/js/tryit.asp?filename=tryjs_events_mouseover 
+
+
+Useful links:
+http://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_onfocus_eventdelegation
+http://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_onblur_onfocus
+http://stackoverflow.com/questions/6585344/styling-list-buttons
+
+
+window.onblur = function() {
+	save url
+
+}
+
+window.onfocus = function() {
+	if(previous url != current url)
+
+	call function(Popup)
+}
+
+
+http://www.developerdrive.com/2013/03/how-to-create-a-beautiful-login-form/

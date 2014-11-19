@@ -1,26 +1,16 @@
 
-/* Testing purposes */
+
 if (!window.console) console = {};
 console.log = console.log || function(){};
 
 /* Global Variables */
 var listTabs=[];
-var currentTabIndex=0;									// Later change to chrome.tab.get(index)
-
-/* Data Types */
 var Tab = function(index,url, newTab) {
 	this.index = index;
 	this.url = url;
-	this.newTab = newTab;								// flag for new created tab with no url
+	this.newTab = newTab;		// flag for new created tab with no url
 }
 
-/* updateURL()
- *
- * Updates the corresponding tab in array
- * with the new URL.
- *
- * tab = current tab information
- */
 function updateURL(tab) {
 	for (var i in listTabs) {
 		if (listTabs[i].index == tab.index) {
@@ -32,58 +22,50 @@ function updateURL(tab) {
 	}
 }
 
-/* sameURL()
- *
- * Checks if tab has been redirected to another URL
- * while unfocused.
- *
- * tab = current tab information
- */
 function sameURL(tab) {
-	for (var i in listTabs) {					
+	for (var i in listTabs) {
 		if (listTabs[i].index == tab.index) {
-			if (listTabs[i].url != tab.url) {
+			console.log(listTabs[i].index + ' | ' + tab.index);
+			if (listTabs[i].url == tab.url) {
 				console.log(listTabs[i].url + ' | ' + tab.url);
-				alert("You've been Tabnabbed");
+				return true;		// URL has not changed while tab was inactive
 			}
-			break;
 		}
 	}
+	return false;
 }
 
-/* Listen for tab creation */
 chrome.tabs.onCreated.addListener(function(nT) {
 	console.log('new tab id: ' + nT.index);
 	listTabs.push(new Tab(nT.index, nT.url, true));
 });
 
-/* Listen for tab changes */
+
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){ 
 	console.log('updated');
 	if (changeInfo.url != 'chrome://newtab/' && changeInfo.url != null) { 
-		console.log(changeInfo.url);
-	/*	chrome.tabs.get(tabId, function(tab) {
+		chrome.tabs.get(tabId, function(tab) {
 			console.log('URL has changed: ' + changeInfo.url);
 			updateURL(tab);			// For some reason the tab id keeps changing
-		});*/
-	} 
+		});
+	} else {
+		console.log(changeInfo.url);
+	}
 });
 
-/* Listen for change in current tab */
 chrome.tabs.onActivated.addListener(function(activeInfo) {			// onActivated fired when active tab changes
 	console.log('onActivated');
 	chrome.tabs.get(activeInfo.tabId, function(tab) {
-		if (currentTabIndex != tab.index) {							// Changed current tab
-			currentTabIndex = tab.index;
-			sameURL(tab);										
-		} else {													// Current tab changed url
-			updateURL(tab);
+		console.log('onActivated: ' + tab.url);
+		if (!sameURL(tab)) {											// Check if current tab url has changed during inactivity 
+			console.log('WARNING: URL has changed');
+		} else {
+			updateURL(tab);											// Update URL list 
 		}
 	});
-
 });
 
-/* Removes tab object from array, when tab has been closed */ 
+// WORKS
 chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
 	console.log('inside onRemoved');
 	for (var i in listTabs) {
